@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="not_merge">
+
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">viaje</Data></Cell>
+        <Cell><Data ss:Type="String">ccni_code</Data></Cell>
+        <Cell><Data ss:Type="String">numero_viaje</Data></Cell>
+        <Cell><Data ss:Type="String">codigo_servicio</Data></Cell>
+        <Cell><Data ss:Type="String">viaje_ant</Data></Cell>
+        <Cell><Data ss:Type="String">viaje_sig</Data></Cell>
+        <Cell><Data ss:Type="String">fecha_inicio</Data></Cell>
+        <Cell><Data ss:Type="String">fecha_termino</Data></Cell>
+        <Cell><Data ss:Type="String">codigo_operador</Data></Cell>
+        <Cell><Data ss:Type="String">id_recalada</Data></Cell>
+        <Cell><Data ss:Type="String">codigo_pais</Data></Cell>
+        <Cell><Data ss:Type="String">codigo_puerto</Data></Cell>
+        <Cell><Data ss:Type="String">tipo_recalada</Data></Cell>
+        <Cell><Data ss:Type="String">secuencia</Data></Cell>
+        <Cell><Data ss:Type="String">fecha_arribo_plani</Data></Cell>
+        <Cell><Data ss:Type="String">fecha_zarpe_planif</Data></Cell>
+        <Cell><Data ss:Type="String">fecha_arribo_conf</Data></Cell>
+        <Cell><Data ss:Type="String">fecha_zarpe_conf</Data></Cell>
+        <Cell><Data ss:Type="String">enlazado_con</Data></Cell>
+        <Cell><Data ss:Type="String">secuencia_1</Data></Cell>
+        <Cell><Data ss:Type="String">pais_dest</Data></Cell>
+        <Cell><Data ss:Type="String">puerto_dest</Data></Cell>
+        <Cell><Data ss:Type="String">arribo_plan_dest</Data></Cell>
+        <Cell><Data ss:Type="String">zarpe_plan_dest</Data></Cell>
+        <Cell><Data ss:Type="String">arribo_conf_dest</Data></Cell>
+        <Cell><Data ss:Type="String">zarpe_conf_dest</Data></Cell>
+        <Cell><Data ss:Type="String">nave</Data></Cell>
+      </Row>
+      <% @out_data.each do |c| %>
+          <Row background="#FF0000">
+            <Cell><Data ss:Type="String"><%= c['viaje'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['ccni_code'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['numero_viaje'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['codigo_servicio'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['viaje_ant'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['viaje_sig'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['fecha_inicio'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['fecha_termino'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['codigo_operador'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['id_recalada'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['codigo_pais'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['codigo_puerto'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['tipo_recalada'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['secuencia'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['fecha_arribo_plani'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['fecha_zarpe_planif'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['fecha_arribo_conf'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['fecha_zarpe_conf'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['enlazado_con'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['secuencia_1'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['pais_dest']  %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['puerto_dest'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['arribo_plan_dest']  %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['zarpe_plan_dest'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['arribo_conf_dest'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['zarpe_conf_dest'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['nave'] %></Data></Cell>
+          </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

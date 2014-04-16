@@ -1,0 +1,54 @@
+.ui-state-default{
+  background-image:image-url('portal/ship-slider.png') !important;
+  width: 70px !important;
+  height: 26px !important;
+}
+.lbl-red{ color: red; }
+#map-canvas {
+    position: relative;
+    width: 100%;
+    height: 314px;
+    margin: 0;
+    padding: 0;
+}
+#form-move { display: none; }
+#form-status { display: none; }
+.text-load{
+    font-size: 16px;
+    font-weight: bold;
+    color: green;
+}
+.text-unload{
+    font-size: 16px;
+    font-weight: bold;
+    color: red;
+}
+.ship{
+    width: 59px;
+    height: 59px;
+}
+.markers{
+    width: 44px;
+    height: 30px;
+}
+.lbl-port{
+    left: 9px;
+    position: relative;
+}
+#slider-flag{
+  width: 87%;
+  top: 14px;
+}
+#slider2{
+    top: 70px;
+    left: 11px;
+    width: 85%;
+}
+.tick {
+    border: 1px solid transparent; /*follows slide handle style for sizing purposes*/
+    position: absolute;
+    width: 1.2em;
+    margin-left: 17px;
+    text-align:center;
+    left: 0;
+}

@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col-lg-7 col-sm-12">
+    <div class="table-responsive">
+      <table class="table" id="table-users">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Created</th>
+          <th>Activated</th>
+          <th>&nbsp;</th>
+          <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody id="table-users-tbody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-lg-5 visible-lg well">
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" id="user" class="input-sm form-control">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="email" class="input-sm form-control">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="password" class="input-sm form-control">
+    </div>
+    <div class="form-group">
+      <label>Role</label>
+      <%= select_tag "role", nil, class: "input-sm form-control" %>
+    </div>
+    <div class="form-group">
+      <label>Activated</label>
+      <input type="checkbox" checked="" data-toggle="switch">
+    </div>
+  </div>
+  <div class="form-group text-right">
+    <button id="btn-save" class="btn btn-primary">Save</button>
+  </div>
+</div>
+<% content_for :javascripts do %>
+    <script type="text/javascript">
+        Users.init();
+    </script>
+<% end %>

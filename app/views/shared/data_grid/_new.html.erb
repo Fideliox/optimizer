@@ -1,0 +1,23 @@
+<%
+   data_grid = @data_grid
+   model = data_grid[:model]
+   column_names = model.columns.select{|c| !data_grid[:ignore].include? c.name}
+   model_name = model.model_name.plural
+%>
+<ul id="myTab" class="nav nav-tabs">
+  <li><a href="#" data-toggle="tab"><strong><%= t('dg.create') %></strong></a></li>
+</ul>
+<div class="tab-content" style="overflow:hidden;">
+  <div class="tab-pane active in active">
+    <form class="form-horizontal" role="form">
+      <% column_names.each do |f| %>
+          <div class="form-group">
+            <%= label_tag(f.name.to_sym, t("#{model_name}.#{f.name}"), :class => "col-lg-2 control-label") %>
+            <div class="col-lg-10">
+              <%= input_type model_name, f, nil %>
+            </div>
+          </div>
+      <% end %>
+    </form>
+  </div>
+</div>

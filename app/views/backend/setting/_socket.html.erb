@@ -1,0 +1,29 @@
+<div class="form-horizontal">
+  <fieldset>
+    <!-- Form Name -->
+    <legend>EO Server <em>"socket"</em></legend>
+    <div id="div-socket"></div>
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="server">Server</label>
+      <div class="col-md-4">
+        <input value="<%= @socket_ip %>" id="sserver" name="sserver" type="text" class="form-control input-md" required="">
+      </div>
+    </div>
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="port">Port</label>
+      <div class="col-md-4">
+        <input id="sport" value="<%= @socket_port %>" name="sport" type="text" class="form-control input-md" required="">
+      </div>
+    </div>
+    <!-- Button (Double) -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="save"></label>
+      <div class="col-md-8">
+        <button id="ssave" name="ssave" class="btn btn-primary">Save</button>
+        <button id="scancel" name="scancel" class="btn btn-danger">Cancel</button>
+      </div>
+    </div>
+  </fieldset>
+</div>

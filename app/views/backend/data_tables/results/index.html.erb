@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="col-sm-2 col-md-2 col-lg-2">
+    <div class="form-group">
+        <label class="">Ship</label>
+        <select class="form-control selectpicker input-sm" id="nave">
+        </select>
+    </div>
+    <div class="form-group">
+      <label class="">Travel</label>
+      <select class="form-control selectpicker input-sm" id="viaje">
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="">Origin</label>
+      <select class="form-control selectpicker input-sm" id="puerto_origen">
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="">Destination</label>
+      <select class="form-control selectpicker input-sm" id="puerto_destino">
+      </select>
+    </div>
+    <div class="form-group">
+      <button class="form-control input-sm btn btn-primary" id="btn-search">
+        Search
+      </button>
+    </div>
+  </div>
+  <div class="col-sm-10 col-md-10 col-lg-10">
+    <div class="table-responsive">
+        <table cellpadding="0" cellspacing="0" border="0"
+               width="100%" class="table table-striped table-bordered dataTable">
+          <thead>
+          <tr>
+            <th class="text-center">&nbsp;</th>
+            <th class="text-center">Ship</th>
+            <th class="text-center">Travel</th>
+            <th class="text-center">Location</th>
+            <th class="text-center">Destination</th>
+            <th class="text-center">Set MaxTeu</th>
+            <th class="text-center">TEU<br />max/total/mty</th>
+            <th class="text-center">Plugs<br />max/used</th>
+            <th class="text-center">Weight<br />max/used</th>
+          </tr>
+          </thead>
+          <tbody id="results" >
+          <%= render 'backend/data_tables/results/initialize_table' %>
+          </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+
+<% content_for :javascripts do %>
+    <script type="text/javascript">
+        Results.init();
+    </script>
+<% end %>

@@ -1,0 +1,31 @@
+#
+#  CODIGOS socket
+#
+# 2 -> eo82
+# 3 -> pp_convertion_primary_distribution.py
+#
+#
+#
+#
+#
+default:
+  api:
+    google:
+      maps:
+        key: LT2uxBeNMe_o3uZEhIDShhAN
+        sensor: false
+  python:
+    ITI:
+      import: itineraries.py
+    DEM:
+      import: demands.py
+    CAP:
+      import: capabilities.py
+    COS:
+      import: costs.py
+    STO:
+      import: stock_summary.py
+    empty:
+      export:
+        xls: empty_od.sh
+

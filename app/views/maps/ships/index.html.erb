@@ -1,0 +1,64 @@
+<% content_for :head do %>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://dimplejs.org/dist/dimple.v1.1.5.min.js"></script>
+<% end %>
+<div class="row">
+  <div class="col-xs-12">
+    <label>Nave</label>
+    <select class="input-sm m-bot15" id="sel-nave">
+    </select>
+    <label>Viaje</label>
+    <select class="input-sm m-bot15" id="sel-viaje">
+    </select>
+    <label></label>
+    <button class="btn btn-info" id="btn-search">Search</button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-7">
+    <div id="map-canvas" class="well" > </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="row">
+          <div class="col-xs-12" id="slider-flag">
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12" id="slider2">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-5">
+    <div id="form-status"><%= render "maps/ships/form_status" %></div>
+    <div id="form-move"><%= render "maps/ships/form_move" %></div>
+  </div>
+</div>
+
+<% content_for :javascripts do %>
+    <script type="text/javascript">
+        Ships.init();
+        var svg = dimple.newSvg("#chart-load", 334, 120);
+        var url = '/api/v1/loader/demands/status?code=SAI&travel=' + $('#sel-viaje').val() + '&ship=' + $('#sel-nave').val();
+        d3.json(url, function(data){
+            console.log(data);
+        });
+       /*
+        d3.tsv("/data/example_data.tsv", function (data) {
+            var myChart = new dimple.chart(svg, data);
+            myChart.setBounds(75, 30, 480, 330)
+            myChart.addMeasureAxis("x", "Unit Sales");
+            var y = myChart.addCategoryAxis("y", "Month");
+            y.addOrderRule("Date");
+            var s1 = myChart.addSeries(null, dimple.plot.bar);
+            s1.data = data;
+            myChart.draw();
+        });
+        */
+    </script>
+<% end %>

@@ -1,0 +1,24 @@
+@import "uploadfile.css";
+
+.header-title{
+    font-size: 24px;
+}
+.file-wrapper {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    cursor: pointer;
+}
+.file-wrapper input {
+    position: absolute;
+    top: 1px;
+    right: 0;
+    filter: alpha(opacity=1);
+    opacity: 0.01;
+    -moz-opacity: 0.01;
+    cursor: pointer;
+}
+.input-file{
+    width: 50px;
+    height: 50px;
+}

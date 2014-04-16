@@ -1,0 +1,15 @@
+#map-canvas {
+    margin: 1px;
+    height: 445px;
+}
+#chart-containers{
+    height: 450px;
+}
+
+.btn-filter{
+    position: relative;
+    top: -3px;
+}
+.gm-style-iw{
+    overflow: hidden !important;
+}

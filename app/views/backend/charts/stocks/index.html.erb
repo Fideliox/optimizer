@@ -1,0 +1,39 @@
+<div class="rows">
+  <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+    <div class="form-group">
+      <label>Container Type</label>
+      <div id="container-type">
+
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Contry</label>
+      <select id="countries" class="form-control selectpicker input-sm">
+
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Port</label>
+      <select id="ports" class="form-control selectpicker input-sm">
+
+      </select>
+    </div>
+    <div class="form-group">
+      <button class="form-control input-sm btn btn-primary" id="btn-search">
+        Search
+      </button>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+    <div id="charts" class="well">
+      <div id="morris"></div>
+    </div>
+  </div>
+
+</div>
+
+<% content_for :javascripts do %>
+    <script type="text/javascript">
+        Stocks.init();
+    </script>
+<% end %>

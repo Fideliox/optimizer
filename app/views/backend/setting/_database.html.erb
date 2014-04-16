@@ -1,0 +1,50 @@
+<div class="form-horizontal">
+  <fieldset>
+    <!-- Form Name -->
+    <legend>Loader Server <em>"database"</em></legend>
+    <div id="div-server"></div>
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="server">Server</label>
+      <div class="col-md-4">
+        <input value="<%= @postgresql_ip %>" id="pserver" name="server" type="text" class="form-control input-md" required="">
+      </div>
+    </div>
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="port">User</label>
+      <div class="col-md-4">
+        <input id="puser" value="<%= @postgresql_user %>" name="puser" type="text" class="form-control input-md" required="">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="port">Password</label>
+      <div class="col-md-4">
+        <input id="ppass" value="" name="port" type="text" class="form-control input-md" required="">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="port">Dbname</label>
+      <div class="col-md-4">
+        <input id="pdbname" value="<%= @postgresql_dbname %>" name="port" type="text" class="form-control input-md" required="">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="port">Port</label>
+      <div class="col-md-4">
+        <input id="pport" value="<%= @postgresql_port %>" name="port" type="text" class="form-control input-md" required="">
+      </div>
+    </div>
+    <!-- Button (Double) -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="save"></label>
+      <div class="col-md-8">
+        <button id="psave" name="save" class="btn btn-primary">Save</button>
+        <button id="pcancel" name="cancel" class="btn btn-danger">Cancel</button>
+      </div>
+    </div>
+  </fieldset>
+</div>

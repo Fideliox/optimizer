@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="col-lg-8  col-lg-offset-2  well" id="tab_setting">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab1" data-toggle="tab">Socket</a></li>
+        <li><a href="#tab2" data-toggle="tab">DB Loader</a></li>
+        <li><a href="#tab3" data-toggle="tab">DB Rds</a></li>
+      </ul>
+      <div class="tab-content">
+          <div class='tab-pane fade in active' id="tab1">
+            <%= render 'socket' %>
+          </div>
+          <div class='tab-pane fade' id="tab2">
+            <%= render 'database' %>
+          </div>
+          <div class='tab-pane fade' id="tab3">
+            <%= render 'db_rds' %>
+          </div>
+      </div>
+    </div>
+</div>
+
+<% content_for :javascripts do %>
+    <script type="text/javascript">
+        Setting.init();
+    </script>
+<% end %>

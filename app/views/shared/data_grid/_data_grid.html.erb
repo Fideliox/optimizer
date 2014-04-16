@@ -1,0 +1,159 @@
+<%
+   data_grid = @data_grid
+   model = data_grid[:model]
+   dataset = data_grid[:dataset]
+   column_names = model.column_names.select{|n| !data_grid[:ignore].include? n}
+   column_names = data_grid[:order] + (column_names - data_grid[:order])  if data_grid[:order]
+%>
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="table-<%= model.table_name %>">
+  <thead>
+  <tr>
+    <% column_names.each{|column| %>
+        <th><%=  data_grid[:alias] ? data_grid[:alias][column.to_sym] ? data_grid[:alias][column.to_sym] : column.humanize : column.humanize %></th>
+    <% } %>
+    <%= "<th>&nbsp;</th>".html_safe if data_grid[:options][:show] %>
+    <%= "<th>&nbsp;</th>".html_safe if data_grid[:options][:edit] %>
+    <%= "<th>&nbsp;</th>".html_safe if data_grid[:options][:activated] %>
+    <%= "<th>&nbsp;</th>".html_safe if data_grid[:options][:delete] %>
+  </tr>
+  </thead>
+  <tbody>
+  <% dataset.each{|item| %>
+      <tr id="tr-dg-<%= item.id %>">
+        <% column_names.each{|column| %>
+            <td id="td-dg-<%= "#{column}-#{item.id}" %>">
+              <%
+                 ref = dg_references(column)
+                 value = ""
+                 if ref
+                   if data_grid[:references]
+                     data_grid[:references].each{|k, v|
+                       if k.to_s == ref
+                         value =  eval("item.#{ref}.#{v}")
+                       end
+                     }
+                   end
+                   if data_grid[:polymorphic]
+                     data_grid[:polymorphic].each{|k, v|
+                       if k.to_s == ref
+                         type = "#{ref}_type"
+                         polymorphic = eval("item.#{ref}_type")
+                         if data_grid[:polymorphic][ref.to_sym][polymorphic.to_sym]
+                           if eval("item.#{ref}") != nil
+                             value = eval("item.#{ref}.#{data_grid[:polymorphic][ref.to_sym][polymorphic.to_sym]}")
+                           else
+                             value = "<span class='text-error'>UNLINK ....</span>".html_safe
+                           end
+                         else
+                           value =  eval("item.#{ref}") ? eval("item.#{ref}.name"):''
+                         end  if polymorphic
+                       end
+                     }
+                   end
+                   if value == ""
+                     value =  eval("item.#{ref}") ? eval("item.#{ref}.name"):''
+                   end
+                 else
+                   value = eval("item.#{column}")
+                 end
+                 value =  get_format data_grid[:format], column, value
+                 concat get_open_link data_grid[:link], column, value
+              %>
+            </td>
+        <%
+           } # /end each
+           image_show  =  image_tag "icons/32-#{model.table_name}-show.png", :class => "tooltip_status img-show", :title => t('dg.read'), :data => { :action => "show", :object => item.id}
+           image_edit  =  image_tag "icons/32-#{model.table_name}-edit.png", :class => "tooltip_status img-edit", :title => t('dg.update'), :data => { :action => "edit", :object => item.id }
+           image_delete  =  image_tag "icons/32-delete.png", :class => "tooltip_status img-delete", :title => t('dg.delete'), :data => { :action => "delete", :object => item.id }
+
+           image_activated  =  image_tag "icons/32-#{model.table_name}-false.png", :class => "tooltip_status", :title => t('dg.actived'), :data => { :action => "activated", :object => item.id}
+           image_activated  =  image_tag "icons/32-#{model.table_name}-true.png", :class => "tooltip_status", :title => t('dg.inactived'), :data => { :action => "activated", :object => item.id}
+        %>
+        <%= "<td><div class='text-center'>#{image_show}</div></td>".html_safe if data_grid[:options][:show] %>
+        <%= "<td><div class='text-center'>#{image_edit}</div></td>".html_safe if data_grid[:options][:edit] %>
+        <%= "<td><div class='text-center'>#{image_activated}</div></td>".html_safe if data_grid[:options][:activated] %>
+        <%= "<td><div class='text-center'>#{image_delete}</div></td>".html_safe if data_grid[:options][:delete] %>
+      </tr>
+  <% } %>
+  </tbody>
+  <tfoot>
+  <tr>
+    <% column_names.each{|column| %>
+        <th><%=  data_grid[:alias] ? data_grid[:alias][column.to_sym] ? data_grid[:alias][column.to_sym] : column.humanize : column.humanize %></th>
+    <% } %>
+    <%= "<th>&nbsp;</th>".html_safe if data_grid[:options][:show] %>
+    <%= "<th>&nbsp;</th>".html_safe if data_grid[:options][:edit] %>
+    <%= "<th>&nbsp;</th>".html_safe if data_grid[:options][:activated] %>
+    <%= "<th>&nbsp;</th>".html_safe if data_grid[:options][:delete] %>
+  </tr>
+  </tfoot>
+</table>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" style="overflow-y: hidden;">
+              .....
+            </div>
+            <div class="modal-footer">
+                <button id="btn-close" class="btn"><%= t('dg.close') %></button>
+                <button id="btn-save" class="btn btn-primary" data-method=''><%= t('dg.save') %></button>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    img{ cursor: pointer; }
+    .dg-text-error{
+        color: red;
+        font-weight:bold;
+        font-size:14px;
+    }
+</style>
+<% content_for :javascripts do %>
+    <script type="text/javascript" charset="utf-8">
+        var dg_msg_delete = "<%= t('dg.msg_delete').html_safe %>";
+        var oTable;
+        var image_show  =  '<%= image_tag "icons/32-#{model.table_name}-show.png", :class => "tooltip_status img-show", :title => t('dg.read'), :data => { :action => "show", :object => "X"} %>';
+        var image_edit  =  '<%= image_tag "icons/32-#{model.table_name}-edit.png", :class => "tooltip_status img-edit", :title => t('dg.update'), :data => { :action => "edit", :object => "X" } %>';
+        var image_delete  = '<%=  image_tag "icons/32-delete.png", :class => "tooltip_status img-delete", :title => t('dg.delete'), :data => { :action => "delete", :object => "X" } %>';
+
+        $(document).ready(function(){
+            var obj = {};
+            var fields = [<%= raw column_names.map { |some_id| '"' + some_id.to_s + '"' }.join(", ") %>];
+            var options = [<%= raw data_grid[:options].map { |some_id| '"' + some_id.to_s + '"' }.join(", ") %>];
+            <%  if cookies[:locale] == 'en' %>
+            obj.language = "<%= asset_path('dataTables.en.txt') %>";
+            <% else %>
+            obj.language = "<%= asset_path('dataTables.es.txt') %>";
+            <% end %>
+            obj.table = "#table-<%= model.table_name %>";
+            obj.icon_new_id =  "#<%= model.table_name %>-icon";
+            obj.modal = '.modal';
+            obj.modal_content = ".modal-body";
+            obj.icon_new_html = '<%= image_tag("icons/32-#{model.table_name}-add.png", :id => "#{model.table_name}-icon", :class => "tooltip_status", :title => t('dg.create'), :data => { :action => "new"}) %>';
+            var dt = $(obj.table).dg(obj);
+            $("#btn-close").click(function(){
+                $("#tr-dg-" + $(this).data("object")).removeClass('text-error');
+                dt.close();
+            });
+            $("#btn-save").click(function(){
+                $("#tr-dg-" + $(this).data("object")).removeClass('text-error');
+                dt.save($(this).data('method'), fields, options);
+            });
+            $(".img-show").click(function(){
+                dt.show($(this).data('object'));
+            });
+            $(".img-edit").click(function(){
+                dt.edit($(this).data('object'), fields);
+            });
+            $(".img-delete").click(function(){
+                dt.delete($(this).data('object'));
+            });
+            $(".open_link").click(function(){
+                dt.open_link($(this).data('object'), $(this).data('url'));
+            });
+        });
+    </script>
+<% end %>

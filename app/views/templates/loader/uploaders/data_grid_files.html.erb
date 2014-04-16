@@ -1,0 +1,42 @@
+<script type="text/html" id="data-grid-files" xmlns="http://www.w3.org/1999/html">
+  <section class="panel">
+    <header class="panel-heading">
+      <p>{{tite}}</p>
+      <div id="{{upload}}" >
+        <i class="icon-search" style="top: -2px; position: relative;">&nbsp;</i>
+      </div>
+    </header>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Filename</th>
+        <th class="td-btn">Del</th>
+        <th class="td-btn">Check</th>
+        <th class="td-btn">Load</th>
+      </tr>
+      </thead>
+      <tbody>
+      {{#list}}
+      <tr>
+        <td><a href="{{download}}">{{name}}</a></td>
+        <td class="text-center">
+          <button class="btn btn-danger btn-xs btn-delete" data-object='{{id}}'>
+            <i class="icon-trash"></i>
+          </button>
+        </td>
+        <td class="text-center">
+          <button class="btn btn-info btn-xs btn-check"  data-object='{{id}}' data-file='{{iz_file_type_id}}'>
+            <i class="icon-check"></i>
+          </button>
+        </td>
+        <td class="text-center">
+          <button class="btn btn-primary btn-xs csv_to_db" disabled data-object='{{id}}'>
+            <i class="icon-cogs"></i>
+          </button>
+        </td>
+      </tr>
+      {{/list}}
+      </tbody>
+    </table>
+  </section>
+</script>

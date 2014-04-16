@@ -1,0 +1,50 @@
+<div class="form-horizontal">
+  <fieldset>
+    <!-- Form Name -->
+    <legend>RDS Server <em>"database"</em></legend>
+    <div id="div-rds"></div>
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="server">Server</label>
+      <div class="col-md-4">
+        <input value="<%= @rds_ip %>" id="rserver" name="server" type="text" class="form-control input-md" required="">
+      </div>
+    </div>
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="port">User</label>
+      <div class="col-md-4">
+        <input id="ruser" value="<%= @rds_user %>" name="ruser" type="text" class="form-control input-md" required="">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="port">Password</label>
+      <div class="col-md-4">
+        <input id="rpass" value="" name="rpass" type="text" class="form-control input-md" required="">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="port">Dbname</label>
+      <div class="col-md-4">
+        <input id="rdbname" value="<%= @rds_dbname %>" name="rdbname" type="text" class="form-control input-md" required="">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="port">Port</label>
+      <div class="col-md-4">
+        <input id="rport" value="<%= @rds_port %>" name="rport" type="text" class="form-control input-md" required="">
+      </div>
+    </div>
+    <!-- Button (Double) -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="save"></label>
+      <div class="col-md-8">
+        <button id="rsave" name="rsave" class="btn btn-primary">Save</button>
+        <button id="rcancel" name="rcancel" class="btn btn-danger">Cancel</button>
+      </div>
+    </div>
+  </fieldset>
+</div>

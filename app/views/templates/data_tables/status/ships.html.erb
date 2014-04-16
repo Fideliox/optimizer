@@ -1,0 +1,20 @@
+<script type="text/html" id="ship" xmlns="http://www.w3.org/1999/html">
+    <div class="panel panel-success" style="height: 100px">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-5 col-md-5 col-lg-5">
+            <%= image_tag 'portal/ship-alpha.png', class: 'ships' %>
+          </div>
+          <div class="col-sm-7 col-md-7 col-lg-7">
+            <ul>
+              <li><div class="label-ship"><label>Ship:</label> {{ship}}</div></li>
+              <li><label><em>Voyage:</em> {{travel}}</label></li>
+            </ul>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 text-center"><label>Departure:</label> {{date}}</div>
+        </div>
+      </div>
+    </div>
+</script>

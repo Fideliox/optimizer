@@ -1,0 +1,101 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require select2-3.3.2/select2
+ *= require select2-3.3.2/select2-bootstrap
+ *= require dataTables/bootstrap
+ */
+
+@import "twitter/bootstrap";
+
+
+/* MENU */
+.nav .caret { border-top-color: #ffffff !important;}
+.nav a:hover .caret { border-top-color: #fea637 !important;}
+.open a .caret { border-top-color: #fea637 !important; }
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus { background-color: #fea637 !important;; }
+
+.nav > li > a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    color: #999;
+}
+.nav > li > a:hover {
+    background-color: #222222;
+    color: #fff;
+}
+
+.nav .open > a{
+    background-color: #090909 !important;
+    color: white;
+}
+
+/* ALERTAS */
+.alert-notice {
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    color: #3a87ad; }
+.alert-notice hr {
+    border-top-color: #a6e1ec; }
+.alert-notice .alert-link {
+    color: #2d6987; }
+
+/* GRILLAS */
+
+.dataTables_paginate {
+    float: right;
+    text-align: right;
+}
+.dataTables_paginate .ui-button {
+
+    margin-right: -0.1em !important;
+}
+
+.paging_two_button .ui-button {
+
+    float: left;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.paging_full_numbers .ui-button {
+
+    padding: 2px 6px;
+    margin: 0;
+    cursor: pointer;
+    cursor: hand;
+    color: #333 !important;
+}
+
+
+
+table tbody tr.odd td.highlighted {
+    background-color: #fea637;
+}
+
+table tr.odd:hover {
+    background-color: #fea637;
+}
+
+table tbody tr.even td.highlighted {
+    background-color: #fea637;
+}
+
+table tr.even:hover {
+    background-color: #fea637;
+}
+
+table > tbody > tr:nth-child(odd) > td {
+    background-color: transparent !important;
+}
+
+.pagination li {display: none;}
+.pagination li.prev, .pagination li.next {display: inline;}

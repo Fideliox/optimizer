@@ -1,0 +1,12 @@
+.down{
+    font-size: 20px;
+}
+.title{
+    font-weight: bold;
+    top: 9px;
+    position: relative;
+}
+.line{
+    top: 13px;
+    position: relative;
+}

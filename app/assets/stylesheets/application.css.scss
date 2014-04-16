@@ -1,0 +1,76 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require ./admin/application
+ *= require ./admin/jquery-gritter
+ *= require ./admin/style
+ *= require ./admin/style-responsive
+ *= require ./admin/font-awesome
+ *= require bootstrap_data_table
+ *= require ./admin/bootstrap.min
+ *
+ */
+
+@import "admin/bootstrap-reset.css";
+/* @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,800); */
+
+body {
+  color: #797979;
+  background: #f1f2f7;
+  font-family: 'Open Sans', sans-serif;
+  padding: 0px !important;
+  margin: 0px !important;
+  font-size: 13px;
+}
+#figure-karguroo{
+  width: 103px;
+  height: 44px;
+  position: relative;
+  margin-top: -14px;
+}
+#logo-karguroo{
+  width: 190px;
+  height: 70px;
+}
+h1, .h1 {
+  font-size: 20px !important;
+}
+.modal-static {
+  position: fixed;
+  top: 50% !important;
+  left: 50% !important;
+  margin-top: -100px;
+  margin-left: -100px;
+  overflow: visible !important;
+}
+.modal-static,
+.modal-static .modal-dialog,
+.modal-static .modal-content {
+  width: 200px;
+  height: 200px;
+}
+.modal-static .modal-dialog,
+.modal-static .modal-content {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.modal-static .modal-content .icon {
+}
+.manito{
+  cursor: pointer;
+}
+.more-results{
+  font-size: 20px;
+  font-weight: bold;
+}
+.test{
+  background-color: red;
+  height: 200px;
+}

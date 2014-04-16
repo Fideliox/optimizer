@@ -1,0 +1,69 @@
+<div class="row">
+  <div class="col-sm-2 col-md-2 col-lg-2">
+    <div class="form-group">
+      <label class="">Ship</label>
+      <select class="form-control selectpicker input-sm" id="nave">
+
+      </select>
+    </div>
+    <div class="form-group">
+      <button class="form-control input-sm btn btn-primary" id="btn-search">
+        Search
+      </button>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10" id="scrolly">
+    <ul class="list-inline" id="viajes">
+      <%= render 'backend/data_tables/cap_viajes/initialize_screen' %>
+      <%= render 'backend/data_tables/cap_viajes/initialize_screen' %>
+      <%= render 'backend/data_tables/cap_viajes/initialize_screen' %>
+      <%= render 'backend/data_tables/cap_viajes/initialize_screen' %>
+      <%= render 'backend/data_tables/cap_viajes/initialize_screen' %>
+      <%= render 'backend/data_tables/cap_viajes/initialize_screen' %>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-2 well">
+    <div id="travel-min"></div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel"></h4>
+      </div>
+      <div class="modal-body">
+        <div id="modal-content" style='margin-bottom: 10px;'></div>
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label class="col-md-4 control-label" for="textinput">Teu</label>
+                <input type="number" value='0' id='teu' />
+          </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label" for="textinput">Length</label>
+                <input type="number" value='0' id='length' />
+          </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label" for="textinput">Plugs</label>
+                <input type="number" value='0' id='plugs' />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="btn-save">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<% content_for :javascripts do %>
+    <script type="text/javascript">
+        CapViajes.init();
+    </script>
+<% end %>

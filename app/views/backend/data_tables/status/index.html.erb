@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="col-sm-2 col-md-2 col-lg-2">
+    <h1>Main Range</h1>
+    <div class="form-group">
+      <label>Service</label>
+      <select id="sel-services" class="input-sm form-control">
+        <option value="">-- Selected --</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Leg</label>
+      <select id="sel-leg" class="input-sm form-control">
+        <option value="">-- Selected --</option>
+      </select>
+    </div>
+    <div class="form-group text-right">
+      <button id="btn-search" class="btn btn-primary">Search</button>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10" id="scrolly">
+    <ul class="list-inline" id="ul-content">
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+        <%= render 'backend/data_tables/status/initialize_ships' %>
+    </ul>
+  </div>
+</div>
+
+<div style="display: none"><%= asset_path('images/ship-alpha.png') %></div>
+<% content_for :javascripts do %>
+    <script type="text/javascript">
+        Status.init();
+    </script>
+<% end %>

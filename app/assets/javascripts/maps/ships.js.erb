@@ -1,0 +1,452 @@
+//= require jquery-ui
+
+var Ships = {
+    _$sel_nave: $('#sel-nave'),
+    _$sel_viaje: $('#sel-viaje'),
+    _$btn_search: $('#btn-search'),
+    _google: google,
+    _canvas: document.getElementById('map-canvas'),
+    _map: null,
+    _flightPath: [],
+    _marker_options: [],
+    _list_markers: [],
+    _flightPlanCoordinates: [],
+    _flight_path_status: [],
+    _interval: [],
+    _amarker_aux: [],
+    _$fstatus: $('#form-status'),
+    _$fmove: $('#form-move'),
+    _$lbl_port_old: [],
+    _slider: '',
+    init: function(){
+        var _this = this;
+        _this._set_naves();
+        _this._bind_search();
+        _this._bind_nave();
+        _this._google.maps.event.addDomListener(window, 'load', _this._initialize());
+    },
+    _set_naves: function(){
+        var _this = this;
+        var url = "/api/v1/loader/demands/unique?field=nave1";
+        $.getJSON(url).done(function(json){
+            _this._$sel_nave.empty().append('<option value="">-- Select Ship -- </option>');
+            $.each(json.data, function(k, v){
+                _this._$sel_nave.append('<option value="' + v + '">' + v + '</option>');
+            });
+        });
+    },
+    _bind_search: function(){
+        var _this = this;
+        _this._$btn_search.bind('click', function(){
+            $processing_modal.modal('show');
+            $('#slider-flag').empty();
+            _this._reset_polyline();
+            _this._reset_markers();
+            _this._stop_animate();
+            _this._poly_lines();
+            _this._markers();
+        });
+    },
+    _bind_nave: function(){
+        var _this = this;
+        var url = '/api/v1/loader/demands/get_viaje1_by_nave1?field=';
+        _this._$sel_nave.bind('change', function(){
+            _this._$sel_viaje.empty().append('<option value="">-- Select nº travel -- </option>');
+            $.get(url + _this._$sel_nave.val()).done(function(json){
+                $.each(json.data, function(k, v){
+                    _this._$sel_viaje.append('<option value="' + v + '">' + v + '</option>');
+                });
+            });
+        });
+    },
+    _initialize: function(){
+        var _this = this;
+        var map_options = {
+            zoom: 3,
+            center: new _this._google.maps.LatLng(-23, -25)
+        };
+        _this._map = new _this._google.maps.Map(_this._canvas, map_options);
+    },
+    _markers: function(){
+        var _this = this;
+        var url = '/api/v1/loader/demands/ports';
+        var data = '?nave=' + _this._$sel_nave.val() + '&viaje=' + _this._$sel_viaje.val();
+        $.get(url + data).done(function(json){
+            //json = JSON.parse('{"result":"OK","ports":[{"lat":"39.2166666667","lng":"9.11666666667","port":"CAG","country":"IT"},{"lat":"40.676301324617","lng":"14.766822814941","port":"SAL","country":"IT"},{"lat":"43.550995316569","lng":"10.30259043379","port":"LIV","country":"IT"},{"lat":"44.414715832572","lng":"8.9152623494433","port":"GOA","country":"IT"},{"lat":"41.35","lng":"2.16666666667","port":"BCN","country":"ES"},{"lat":"39.451070047087","lng":"-0.33027648925781","port":"VLC","country":"ES"},{"lat":"26.063219177621","lng":"-80.12020111084","port":"PEF","country":"US"},{"lat":"19.2","lng":"-96.1333333333","port":"VER","country":"MX"},{"lat":"22.482055485937","lng":"-97.864151000977","port":"ATM","country":"MX"},{"lat":"29.75","lng":"-95.3333333333002","port":"HOU","country":"US"},{"lat":"29.95","lng":"-90.063061777784","port":"MSY","country":"US"},{"lat":"26.063219177621","lng":"-80.12020111084","port":"PEF","country":"US"},{"lat":"39.2166666667","lng":"9.11666666667","port":"CAG","country":"IT"}]}');
+            if (json.result=='OK'){
+                var count = json.ports.length;
+                var porcent = 0;
+                var cont = 0;
+                $.each(json.ports, function(k, v){
+                    porcent = (cont * 100 / (count-1));
+                    _this._paint_markers(v, porcent, cont);
+                    cont++;
+                });
+                _this._fit_to_markers(_this._list_markers);
+                _this._slider = $( "#slider2" ).slider({
+                    max: count-1,
+                    step: 0.5,
+                    animate: "fast",
+                    change: function( event, ui ) {
+                        window.$processing_modal.modal('show');
+                        _this._reset_poly_line_aux();
+                        var mod = parseFloat(ui.value) % 2;
+                        if (_this._$lbl_port_old[0]!=undefined)
+                            _this._$lbl_port_old[0].removeClass('lbl-red');
+                        if (_this._$lbl_port_old[1]!=undefined)
+                            _this._$lbl_port_old[1].removeClass('lbl-red');
+                        if(mod == 0 || mod == 1 ){
+                            _this._set_form(ui.value);
+                            $('#lbl-port-'+ ui.value).addClass('lbl-red');
+                            _this._$lbl_port_old[0] = $('#lbl-port-' + ui.value);
+                        }else{
+                            var more = (ui.value+0.5);
+                            var less = (ui.value-0.5);
+                            $('#lbl-port-'+ more).addClass('lbl-red');
+                            $('#lbl-port-'+ less).addClass('lbl-red');
+                            _this._$lbl_port_old[0] = $('#lbl-port-' + more);
+                            _this._$lbl_port_old[1] = $('#lbl-port-' + less);
+                            _this._set_form_actual((ui.value-0.5), (ui.value+0.5));
+                        }
+                    }
+                });
+                $('.ui-slider-handle').focus();
+                _this._slider.slider( "option", "value", 0 );
+            }
+        });
+    },
+    _set_form_actual: function(ori, des){
+        var _this = this;
+        _this._$fstatus.hide();
+        _this._$fmove.show();
+        _this._marker_aux(_this._list_markers[ori].getPosition().d, _this._list_markers[ori].getPosition().e, 0);
+        _this._marker_aux(_this._list_markers[des].getPosition().d, _this._list_markers[des].getPosition().e, 1);
+        _this._poly_lines_aux(ori, des);
+        var code_ori = _this._list_markers[ori].title;
+        var code_des = _this._list_markers[des].title;
+        var url = '/api/v1/loader/demands/move?code_ori=' + code_ori + '&code_des=' + code_des + '&travel=' + _this._$sel_viaje.val() + '&ship=' + _this._$sel_nave.val();
+        $.getJSON(url).done(function(json){
+            var series = [];
+            var teus = 0;
+            var categories = [];
+            if(json.status.length>0){
+                for(var i = 0; i < json.status.length; i++){
+                    teus = teus + parseInt(json.status[i].teu);
+                    series.push(parseInt(json.status[i].teu));
+                    categories.push(json.status[i].container);
+                }
+            }
+            _this._set_chart($('#chart-load-move'), series, categories);
+            $('#text-move').text(Utils.number_format(teus,0, ',', '.') + ' TEUs');
+        });
+        window.$processing_modal.modal('hide');
+    },
+    _set_form: function(index){
+        var _this = this;
+        _this._$fstatus.show();
+        _this._$fmove.hide();
+        if (_this._list_markers[index] != undefined){
+            var code = _this._list_markers[index].title;
+            var url = '/api/v1/loader/demands/status?code=' + code + '&travel=' + _this._$sel_viaje.val() + '&ship=' + _this._$sel_nave.val();
+            $.getJSON(url).done(function(json){
+                $('#form-title').text(json.puerto);
+                _this._marker_aux(json.lat, json.lng, 0);
+                var series = [];
+                var teus = 0;
+                var categories = [];
+                if(json.list.load.length>0){
+                    for(var i = 0; i < json.list.load.length; i++){
+                        teus = teus + parseInt(json.list.load[i].teu);
+                        series.push(parseInt(json.list.load[i].teu));
+                        categories.push(json.list.load[i].container);
+                    }
+                }
+                _this._set_chart($('#chart-load'), series, categories);
+                $('.text-load').text(Utils.number_format(teus,0, ',', '.') + ' TEUs');
+                $('.text-load').append('<i class="icon-upload"></i>');
+                series = [];
+                categories = [];
+                teus = 0;
+                if(json.list.unload.length>0){
+                    for(var i = 0; i < json.list.unload.length; i++){
+                        teus = teus + parseInt(json.list.unload[i].teu);
+                        series.push(parseInt(json.list.unload[i].teu));
+                        categories.push(json.list.unload[i].container);
+                    }
+                }
+                _this._set_chart($('#chart-unload'), series, categories);
+                $('.text-unload').text(Utils.number_format(teus,0, ',', '.') + ' TEUs');
+                $('.text-unload').append('<i class="icon-download"></i>');
+                window.$processing_modal.modal('hide');
+            });
+        }else{
+            window.$processing_modal.modal('hide');
+        }
+    },
+    _set_chart: function($obj, series, categories){
+        $obj.highcharts({
+            chart: { type: 'bar' },
+            title: null,
+            xAxis: {
+                categories: categories,
+                title: null,
+                min: 0
+            },
+            yAxis: { title: null },
+            legend: { enabled: false },
+            tooltip: {
+                pointFormat: '{point.y} TEUs'
+            },
+            exporting: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    pointWidth: 10
+                },
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                data: series,
+                dataLabels: {
+                    enabled: true,
+                    color: '#FFFFFF',
+                    align: 'right',
+                    x: -4,
+                    y: -0,
+                    style: {
+                        fontSize: '10px',
+                        fontFamily: 'Verdana, sans-serif',
+                        textShadow: '0 0 3px black'
+                    }
+                }
+            }]
+        });
+    },
+    _reset_markers: function(){
+        var _this = this;
+        for (var i = 0; i < _this._list_markers.length; i++ ) {
+            _this._list_markers[i].setMap(null);
+        }
+        _this._list_markers.length = 0;
+        _this._list_markers = [];
+    },
+    _reset_polyline: function(){
+        var _this = this;
+        for (var i = 0; i < _this._flightPath.length; i++ ) {
+            _this._flightPath[i].setMap(null);
+        }
+        _this._flightPath.length = 0;
+        _this._flightPath = [];
+    },
+    _reset_poly_line_aux: function(){
+        var _this = this;
+        for (var i = 0; i < _this._flight_path_status.length; i++ ) {
+            _this._flight_path_status[i].setMap(null);
+        }
+        _this._flight_path_status.length = 0;
+        _this._flight_path_status = [];
+    },
+    _poly_lines_aux: function(ori, des){
+        var _this = this;
+        var flightPlanCoordinates = [];
+        flightPlanCoordinates[0]= new _this._google.maps.LatLng(_this._list_markers[ori].getPosition().d, _this._list_markers[ori].getPosition().e);
+        flightPlanCoordinates[1]= new _this._google.maps.LatLng(_this._list_markers[des].getPosition().d, _this._list_markers[des].getPosition().e);
+        _this._flight_path_status.push(new _this._google.maps.Polyline({
+            path: flightPlanCoordinates,
+            geodesic: true,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 4,
+            map: _this._map
+        }));
+        $processing_modal.modal('hide');
+    },
+    _marker_aux: function(lat, lng, index){
+        var _this = this;
+        var icon = '<%= asset_path "portal/markers/marker-yel.png" %>';
+        var marker_image = new _this._google.maps.MarkerImage(
+            icon,
+            new _this._google.maps.Size(25, 25),
+            new _this._google.maps.Point(0, 0),
+            new _this._google.maps.Point(11, 11)
+        );
+        var marker_options = {
+            icon: marker_image,
+            title: '',
+            map: _this._map,
+            position: new _this._google.maps.LatLng(lat, lng),
+            animation: _this._google.maps.Animation.DROP
+        };
+        if (_this._amarker_aux[index]!=undefined)
+            _this._amarker_aux[index].setMap(null);
+        if (_this._amarker_aux[1]!=undefined)
+            _this._amarker_aux[1].setMap(null);
+        _this._amarker_aux[index] = new _this._google.maps.Marker(marker_options);
+    },
+    _paint_markers: function(port, porcent, index){
+        var _this = this;
+        var icon = '<%= asset_path "portal/markers/marker-blue.png" %>';
+        var marker_image = new _this._google.maps.MarkerImage(
+            icon,
+            new _this._google.maps.Size(25, 25),
+            new _this._google.maps.Point(0, 0),
+            new _this._google.maps.Point(11, 11)
+        );
+        var marker_options = {
+            ori: port.ori,
+            des: port.des,
+            icon: marker_image,
+            title: port.country + port.port,
+            map: _this._map,
+            position: new _this._google.maps.LatLng(port.lat, port.lng),
+            //info_window: html_content.join(''),
+            animation: _this._google.maps.Animation.DROP
+        };
+        _this._list_markers.push(new _this._google.maps.Marker(marker_options));
+        _this._slider_flags(port, porcent, index);
+    },
+    _slider_flags: function(port, porcent, index){
+        var image;
+        switch (port.country){
+            case 'AR':
+                image = '<%= image_tag "portal/markers/AR.png", class: 'markers' %>';
+                break;
+            case 'BR':
+                image = '<%= image_tag "portal/markers/BR.png", class: 'markers' %>';
+                break;
+            case 'BE':
+                image = '<%= image_tag "portal/markers/BE.png", class: 'markers' %>';
+                break;
+            case 'CO':
+                image = '<%= image_tag "portal/markers/CO.png", class: 'markers' %>';
+                break;
+            case 'CL':
+                image = '<%= image_tag "portal/markers/CL.png", class: 'markers' %>';
+                break;
+            case 'CN':
+                image = '<%= image_tag "portal/markers/CN.png", class: 'markers' %>';
+                break;
+            case 'DE':
+                image = '<%= image_tag "portal/markers/DE.png", class: 'markers' %>';
+                break;
+            case 'EC':
+                image = '<%= image_tag "portal/markers/EC.png", class: 'markers' %>';
+                break;
+            case 'ES':
+                image = '<%= image_tag "portal/markers/ES.png", class: 'markers' %>';
+                break;
+            case 'FR':
+                image = '<%= image_tag "portal/markers/FR.png", class: 'markers' %>';
+                break;
+            case 'HK':
+                image = '<%= image_tag "portal/markers/HK.png", class: 'markers' %>';
+                break;
+            case 'IT':
+                image = '<%= image_tag "portal/markers/IT.png", class: 'markers' %>';
+                break;
+            case 'KR':
+                image = '<%= image_tag "portal/markers/KR.png", class: 'markers' %>';
+                break;
+            case 'MX':
+                image = '<%= image_tag "portal/markers/MX.png", class: 'markers' %>';
+                break;
+            case 'MY':
+                image = '<%= image_tag "portal/markers/MY.png", class: 'markers' %>';
+                break;
+            case 'NL':
+                image = '<%= image_tag "portal/markers/NL.png", class: 'markers' %>';
+                break;
+            case 'PA':
+                image = '<%= image_tag "portal/markers/PA.png", class: 'markers' %>';
+                break;
+            case 'PE':
+                image = '<%= image_tag "portal/markers/PE.png", class: 'markers' %>';
+                break;
+            case 'TW':
+                image = '<%= image_tag "portal/markers/TW.png", class: 'markers' %>';
+                break;
+            case 'US':
+                image = '<%= image_tag "portal/markers/US.png", class: 'markers' %>';
+                break;
+            case 'UY':
+                image = '<%= image_tag "portal/markers/UY.png", class: 'markers' %>';
+                break;
+        }
+        $('<span />', {class: 'tick', style: 'left: '+ porcent + '%' }).append(image + '<br /><div class="lbl-port" id="lbl-port-'+ index +'">' + port.port + '</div>').appendTo($('#slider-flag'));
+    },
+    _poly_lines: function(){
+        var _this = this;
+        var url = '/api/v1/loader/demands/travels';
+        _this._flightPath = [];
+        _this._flightPlanCoordinates = [];
+        var lineSymbol = {
+            path: _this._google.maps.SymbolPath.CIRCLE,
+            scale: 2,
+            strokeColor: 'red',
+            fillColor: 'red',
+            fillOpacity: 1
+        };
+        var data = '?nave=' + _this._$sel_nave.val() + '&viaje=' + _this._$sel_viaje.val();
+        $.get(url + data).done(function(json){
+            //json = JSON.parse('{"result":"OK","coordinates":[{"lat":"39.2166666667","lng":"9.11666666667"},{"lat":"39.183984877368","lng":"9.1120331059567"},{"lat":"39.183984877368","lng":"9.1120331059567"},{"lat":"39.135585439329","lng":"9.164976577041"},{"lat":"38.946037567867","lng":"9.5112687485498"},{"lat":"40.593099532165","lng":"14.273986816406"},{"lat":"40.534676780615","lng":"14.315185546875"},{"lat":"40.545113154701","lng":"14.672241210938"},{"lat":"40.6410514961","lng":"14.754638671875"},{"lat":"40.6410514961","lng":"14.754638671875"},{"lat":"40.676301324617","lng":"14.766822814941"},{"lat":"40.676301324617","lng":"14.766822814941"},{"lat":"40.6410514961","lng":"14.754638671875"},{"lat":"40.6410514961","lng":"14.754638671875"},{"lat":"40.545113154701","lng":"14.672241210938"},{"lat":"40.534676780615","lng":"14.315185546875"},{"lat":"40.593099532165","lng":"14.273986816406"},{"lat":"40.763901280946","lng":"14.073486328125"},{"lat":"40.803414834406","lng":"13.969116210938"},{"lat":"41.197256518009","lng":"12.881469726562"},{"lat":"41.407200866421","lng":"12.588272094727"},{"lat":"41.68653319188","lng":"12.206707143257"},{"lat":"41.998284017786","lng":"11.748504638672"},{"lat":"42.427511326391","lng":"10.896377563477"},{"lat":"42.447781434623","lng":"11.013793945312"},{"lat":"42.740960955168","lng":"10.70068359375"},{"lat":"42.873951296241","lng":"10.471343994141"},{"lat":"42.886027148329","lng":"10.458984375"},{"lat":"42.95240208569","lng":"10.384826660156"},{"lat":"43.346153683457","lng":"10.413665771484"},{"lat":"43.442948806351","lng":"10.247497558594"},{"lat":"43.546557380512","lng":"10.262603759766"},{"lat":"43.546557380512","lng":"10.262603759766"},{"lat":"43.550995316569","lng":"10.30259043379"},{"lat":"43.550995316569","lng":"10.30259043379"},{"lat":"43.546557380512","lng":"10.262603759766"},{"lat":"43.546557380512","lng":"10.262603759766"},{"lat":"44.011583199449","lng":"10.022277832031"},{"lat":"43.986886309343","lng":"9.7531127929688"},{"lat":"44.285028260572","lng":"9.2120361328125"},{"lat":"44.305575339071","lng":"9.0438701904977"},{"lat":"44.378717067248","lng":"8.9334297180176"},{"lat":"44.384728665111","lng":"8.9293098449707"},{"lat":"44.404599349745","lng":"8.9190101623535"},{"lat":"44.41060828949","lng":"8.9160919189453"},{"lat":"44.41060828949","lng":"8.9160919189453"},{"lat":"44.414715832572","lng":"8.9152623494433"},{"lat":"44.414715832572","lng":"8.9152623494433"},{"lat":"44.41060828949","lng":"8.9160919189453"},{"lat":"44.41060828949","lng":"8.9160919189453"},{"lat":"44.404599349745","lng":"8.9190101623535"},{"lat":"44.384728665111","lng":"8.9293098449707"},{"lat":"44.378717067248","lng":"8.9334297180176"},{"lat":"44.323848072507","lng":"8.8357543945312"},{"lat":"43.903829463607","lng":"8.2781982421875"},{"lat":"43.874443697345","lng":"8.1452985838437"},{"lat":"43.824409856956","lng":"8.0113359200149"},{"lat":"42.947234224783","lng":"6.47644042968749"},{"lat":"41.909707258644","lng":"3.3645629882812"},{"lat":"41.621352287105","lng":"3.0075073242188"},{"lat":"41.306859690991","lng":"2.1768740551757"},{"lat":"41.322847464671","lng":"2.1669176953125"},{"lat":"41.334706827231","lng":"2.1658877270507"},{"lat":"41.345017561661","lng":"2.1658877270507"},{"lat":"41.345017561661","lng":"2.1658877270507"},{"lat":"41.35","lng":"2.16666666667"},{"lat":"41.35","lng":"2.16666666667"},{"lat":"41.345017561661","lng":"2.1658877270507"},{"lat":"41.345017561661","lng":"2.1658877270507"},{"lat":"41.334706827231","lng":"2.1658877270507"},{"lat":"41.322847464671","lng":"2.1669176953125"},{"lat":"41.306859690991","lng":"2.1768740551757"},{"lat":"41.222716074857","lng":"1.9890972242576"},{"lat":"40.643169168585","lng":"0.90898312499996"},{"lat":"40.221982198619","lng":"0.44112510568834"},{"lat":"39.666596180098","lng":"-0.15137433196389"},{"lat":"39.585887974714","lng":"-0.19009742521735"},{"lat":"39.452665113645","lng":"-0.30019961425785"},{"lat":"39.452665113645","lng":"-0.30019961425785"},{"lat":"39.451070047087","lng":"-0.33027648925781"},{"lat":"39.451070047087","lng":"-0.33027648925781"},{"lat":"39.452665113645","lng":"-0.30019961425785"},{"lat":"39.452665113645","lng":"-0.30019961425785"},{"lat":"38.825300205001","lng":"0.21409787109371"},{"lat":"38.7491831718439","lng":"0.307617187499969"},{"lat":"38.628536747544","lng":"0.23799251714786"},{"lat":"37.649069066884","lng":"-0.60575686523441"},{"lat":"37.559854809142","lng":"-0.67854128906254"},{"lat":"36.703552366184","lng":"-1.9469313709575"},{"lat":"36.646420809013","lng":"-2.2111340625"},{"lat":"35.944781116016","lng":"-5.2823638916016"},{"lat":"35.939203883606","lng":"-5.5055236816406"},{"lat":"35.895181682182","lng":"-5.73486328125"},{"lat":"26.977864563025","lng":"-77.873840332031"},{"lat":"26.917482962839","lng":"-78.435730099996"},{"lat":"26.734337128301","lng":"-78.975219726561"},{"lat":"26.640093919805","lng":"-79.063110351562"},{"lat":"25.974611731762","lng":"-79.968083559245"},{"lat":"26.064184903324","lng":"-80.086212158203"},{"lat":"26.064184903324","lng":"-80.086212158203"},{"lat":"26.063219177621","lng":"-80.12020111084"},{"lat":"26.063219177621","lng":"-80.12020111084"},{"lat":"26.064184903324","lng":"-80.086212158203"},{"lat":"26.064184903324","lng":"-80.086212158203"},{"lat":"25.974611731762","lng":"-79.968083559245"},{"lat":"25.524071455901","lng":"-80.006561279296"},{"lat":"25.163013398961","lng":"-80.119171142578"},{"lat":"24.684945208051","lng":"-80.44189453125"},{"lat":"24.370032173291","lng":"-81.710815429688"},{"lat":"22.787466183908","lng":"-84.262390136719"},{"lat":"21.773605845295","lng":"-88.681640625"},{"lat":"21.698265496852","lng":"-88.964538574219"},{"lat":"21.647320749671","lng":"-89.230970200547"},{"lat":"21.38914734244","lng":"-90.195007324219"},{"lat":"19.313735384651","lng":"-95.962829589843"},{"lat":"19.313735384651","lng":"-95.962829589843"},{"lat":"19.2","lng":"-96.1333333333"},{"lat":"19.2","lng":"-96.1333333333"},{"lat":"19.313735384651","lng":"-95.962829589843"},{"lat":"19.313735384651","lng":"-95.962829589843"},{"lat":"21.56294769154","lng":"-97.127380371094"},{"lat":"22.308790591531","lng":"-97.739181518554"},{"lat":"22.489719543879","lng":"-97.794799804688"},{"lat":"22.489719543879","lng":"-97.794799804688"},{"lat":"22.482055485937","lng":"-97.864151000977"},{"lat":"22.482055485937","lng":"-97.864151000977"},{"lat":"22.489719543879","lng":"-97.794799804688"},{"lat":"22.489719543879","lng":"-97.794799804688"},{"lat":"23.664650731631","lng":"-96.7236328125"},{"lat":"25.24442128603","lng":"-96.755341670721"},{"lat":"28.870868363701","lng":"-95.247468135565"},{"lat":"29.241900371409","lng":"-94.809904666629"},{"lat":"29.31248152484","lng":"-94.711197993963"},{"lat":"29.341709195255","lng":"-94.707641601562"},{"lat":"29.3608612407891","lng":"-94.7982788085938"},{"lat":"29.6570104030082","lng":"-94.9465942382815"},{"lat":"29.7046943286338","lng":"-94.9795532226561"},{"lat":"29.7213783036728","lng":"-95.0070190429689"},{"lat":"29.7499728866609","lng":"-95.0537109374999"},{"lat":"29.7666492568562","lng":"-95.0839233398439"},{"lat":"29.7475903192565","lng":"-95.1031494140627"},{"lat":"29.738059477736","lng":"-95.1416015625002"},{"lat":"29.7523553968696","lng":"-95.1718139648436"},{"lat":"29.7475903192565","lng":"-95.1992797851564"},{"lat":"29.7237615000493","lng":"-95.2130126953123"},{"lat":"29.7261446392603","lng":"-95.2404785156251"},{"lat":"29.7261446392603","lng":"-95.2404785156251"},{"lat":"29.7499728866609","lng":"-95.2954101562502"},{"lat":"29.75","lng":"-95.3333333333002"},{"lat":"29.75","lng":"-95.3333333333002"},{"lat":"29.7499728866609","lng":"-95.2954101562502"},{"lat":"29.7261446392603","lng":"-95.2404785156251"},{"lat":"29.7261446392603","lng":"-95.2404785156251"},{"lat":"29.7237615000493","lng":"-95.2130126953123"},{"lat":"29.7475903192565","lng":"-95.1992797851564"},{"lat":"29.7523553968696","lng":"-95.1718139648436"},{"lat":"29.738059477736","lng":"-95.1416015625002"},{"lat":"29.7475903192565","lng":"-95.1031494140627"},{"lat":"29.7666492568562","lng":"-95.0839233398439"},{"lat":"29.7499728866609","lng":"-95.0537109374999"},{"lat":"29.7213783036728","lng":"-95.0070190429689"},{"lat":"29.7046943286338","lng":"-94.9795532226561"},{"lat":"29.6570104030082","lng":"-94.9465942382815"},{"lat":"29.3608612407891","lng":"-94.7982788085938"},{"lat":"29.341709195255","lng":"-94.707641601562"},{"lat":"28.686281447945","lng":"-90.9228515625"},{"lat":"28.90058093549","lng":"-89.433860778808"},{"lat":"28.913788227082","lng":"-89.425277709961"},{"lat":"28.962439790059","lng":"-89.387855529785"},{"lat":"29.004146751269","lng":"-89.351123057458"},{"lat":"29.046894416089","lng":"-89.318161010742"},{"lat":"29.066837274078","lng":"-89.304001288744"},{"lat":"29.078676035583","lng":"-89.287776947022"},{"lat":"29.106405857797","lng":"-89.272155761719"},{"lat":"29.129181803794","lng":"-89.26082611084"},{"lat":"29.157647431499","lng":"-89.256362915039"},{"lat":"29.192848909556","lng":"-89.274387359619"},{"lat":"29.224435133157","lng":"-89.2913818359376"},{"lat":"29.252420931895","lng":"-89.318633079529"},{"lat":"29.2699309537328","lng":"-89.3380737304686"},{"lat":"29.276715460657","lng":"-89.34511116615"},{"lat":"29.288291076823","lng":"-89.355669021606"},{"lat":"29.298931298675","lng":"-89.366267903349"},{"lat":"29.310917835722","lng":"-89.375152587891"},{"lat":"29.327216574469","lng":"-89.389057159424"},{"lat":"29.351441158628","lng":"-89.417381286621"},{"lat":"29.36190264457","lng":"-89.443817138672"},{"lat":"29.363253281371","lng":"-89.453001081917"},{"lat":"29.360414361438","lng":"-89.460124969482"},{"lat":"29.348933306914","lng":"-89.468665936179"},{"lat":"29.342988035785","lng":"-89.47600439288"},{"lat":"29.343067667638","lng":"-89.484157562256"},{"lat":"29.3512934873668","lng":"-89.5028686523438"},{"lat":"29.364229020841","lng":"-89.534538404139"},{"lat":"29.367286495915","lng":"-89.548015594482"},{"lat":"29.374313479578","lng":"-89.563979134535"},{"lat":"29.3823853663255","lng":"-89.5797729492188"},{"lat":"29.389857206885","lng":"-89.590415163703"},{"lat":"29.3991231740028","lng":"-89.5989990234376"},{"lat":"29.405810151196","lng":"-89.603633489345"},{"lat":"29.414590662647","lng":"-89.605865218343"},{"lat":"29.433347817401","lng":"-89.602088928222"},{"lat":"29.4421504715334","lng":"-89.6017456054688"},{"lat":"29.452181526406","lng":"-89.60985528223"},{"lat":"29.457428565795","lng":"-89.621056317455"},{"lat":"29.456561205517","lng":"-89.635562912032"},{"lat":"29.461118341086","lng":"-89.657020568848"},{"lat":"29.468282453592","lng":"-89.672298431397"},{"lat":"29.476868682329","lng":"-89.682511096809"},{"lat":"29.489040449196","lng":"-89.695472717285"},{"lat":"29.519792687209","lng":"-89.722508229162"},{"lat":"29.527548356756","lng":"-89.737186431885"},{"lat":"29.5424758556979","lng":"-89.7637939453123"},{"lat":"29.560676170769","lng":"-89.77855682373"},{"lat":"29.575296151869","lng":"-89.799499511719"},{"lat":"29.597074860822","lng":"-89.833316802979"},{"lat":"29.604527691319","lng":"-89.853401184082"},{"lat":"29.612431703646","lng":"-89.890651702881"},{"lat":"29.6236180667494","lng":"-89.9121093749999"},{"lat":"29.635696011447","lng":"-89.929960797179"},{"lat":"29.64060999536","lng":"-89.944381713867"},{"lat":"29.644634174573","lng":"-89.951075713374"},{"lat":"29.651641897147","lng":"-89.956740421781"},{"lat":"29.6641644481431","lng":"-89.9588012695315"},{"lat":"29.677133982014","lng":"-89.961803871031"},{"lat":"29.68533071593","lng":"-89.966867257992"},{"lat":"29.704408297992","lng":"-89.979743957519"},{"lat":"29.7166117394342","lng":"-89.9862670898438"},{"lat":"29.732540251521","lng":"-89.995021820068"},{"lat":"29.744681531567","lng":"-90.011328938736"},{"lat":"29.753094430217","lng":"-90.022315979004"},{"lat":"29.77498332017","lng":"-90.022830963135"},{"lat":"29.793893289293","lng":"-90.011588839262"},{"lat":"29.810716209823","lng":"-90.003604888916"},{"lat":"29.8285655077567","lng":"-89.997253417969"},{"lat":"29.84730902821","lng":"-89.981460571289"},{"lat":"29.865604461168","lng":"-89.974250793457"},{"lat":"29.878032050671","lng":"-89.972878303458"},{"lat":"29.882867804898","lng":"-89.965325122609"},{"lat":"29.876909213494","lng":"-89.948329925537"},{"lat":"29.864262608306","lng":"-89.922752380371"},{"lat":"29.866047484783","lng":"-89.913397648523"},{"lat":"29.875274731324","lng":"-89.904041884007"},{"lat":"29.889560419819","lng":"-89.904556274414"},{"lat":"29.903675312668","lng":"-89.910392761231"},{"lat":"29.915493624492","lng":"-89.91863129852"},{"lat":"29.922697957724","lng":"-89.936141967773"},{"lat":"29.924927533235","lng":"-89.973049163818"},{"lat":"29.935927977989","lng":"-89.997081756592"},{"lat":"29.953840144044","lng":"-90.028924842047"},{"lat":"29.958375542889","lng":"-90.043430328369"},{"lat":"29.95898034853","lng":"-90.052421667588"},{"lat":"29.955866730955","lng":"-90.058494693929"},{"lat":"29.949639448488","lng":"-90.060254625741"},{"lat":"29.949639448488","lng":"-90.060254625741"},{"lat":"29.95","lng":"-90.063061777784"},{"lat":"29.95","lng":"-90.063061777784"},{"lat":"29.949639448488","lng":"-90.060254625741"},{"lat":"29.949639448488","lng":"-90.060254625741"},{"lat":"29.955866730955","lng":"-90.058494693929"},{"lat":"29.95898034853","lng":"-90.052421667588"},{"lat":"29.958375542889","lng":"-90.043430328369"},{"lat":"29.953840144044","lng":"-90.028924842047"},{"lat":"29.935927977989","lng":"-89.997081756592"},{"lat":"29.924927533235","lng":"-89.973049163818"},{"lat":"29.922697957724","lng":"-89.936141967773"},{"lat":"29.915493624492","lng":"-89.91863129852"},{"lat":"29.903675312668","lng":"-89.910392761231"},{"lat":"29.889560419819","lng":"-89.904556274414"},{"lat":"29.875274731324","lng":"-89.904041884007"},{"lat":"29.866047484783","lng":"-89.913397648523"},{"lat":"29.864262608306","lng":"-89.922752380371"},{"lat":"29.876909213494","lng":"-89.948329925537"},{"lat":"29.882867804898","lng":"-89.965325122609"},{"lat":"29.878032050671","lng":"-89.972878303458"},{"lat":"29.865604461168","lng":"-89.974250793457"},{"lat":"29.84730902821","lng":"-89.981460571289"},{"lat":"29.8285655077567","lng":"-89.997253417969"},{"lat":"29.810716209823","lng":"-90.003604888916"},{"lat":"29.793893289293","lng":"-90.011588839262"},{"lat":"29.77498332017","lng":"-90.022830963135"},{"lat":"29.753094430217","lng":"-90.022315979004"},{"lat":"29.744681531567","lng":"-90.011328938736"},{"lat":"29.732540251521","lng":"-89.995021820068"},{"lat":"29.7166117394342","lng":"-89.9862670898438"},{"lat":"29.704408297992","lng":"-89.979743957519"},{"lat":"29.68533071593","lng":"-89.966867257992"},{"lat":"29.677133982014","lng":"-89.961803871031"},{"lat":"29.6641644481431","lng":"-89.9588012695315"},{"lat":"29.651641897147","lng":"-89.956740421781"},{"lat":"29.644634174573","lng":"-89.951075713374"},{"lat":"29.64060999536","lng":"-89.944381713867"},{"lat":"29.635696011447","lng":"-89.929960797179"},{"lat":"29.6236180667494","lng":"-89.9121093749999"},{"lat":"29.612431703646","lng":"-89.890651702881"},{"lat":"29.604527691319","lng":"-89.853401184082"},{"lat":"29.597074860822","lng":"-89.833316802979"},{"lat":"29.575296151869","lng":"-89.799499511719"},{"lat":"29.560676170769","lng":"-89.77855682373"},{"lat":"29.5424758556979","lng":"-89.7637939453123"},{"lat":"29.527548356756","lng":"-89.737186431885"},{"lat":"29.519792687209","lng":"-89.722508229162"},{"lat":"29.489040449196","lng":"-89.695472717285"},{"lat":"29.476868682329","lng":"-89.682511096809"},{"lat":"29.468282453592","lng":"-89.672298431397"},{"lat":"29.461118341086","lng":"-89.657020568848"},{"lat":"29.456561205517","lng":"-89.635562912032"},{"lat":"29.457428565795","lng":"-89.621056317455"},{"lat":"29.452181526406","lng":"-89.60985528223"},{"lat":"29.4421504715334","lng":"-89.6017456054688"},{"lat":"29.433347817401","lng":"-89.602088928222"},{"lat":"29.414590662647","lng":"-89.605865218343"},{"lat":"29.405810151196","lng":"-89.603633489345"},{"lat":"29.3991231740028","lng":"-89.5989990234376"},{"lat":"29.389857206885","lng":"-89.590415163703"},{"lat":"29.3823853663255","lng":"-89.5797729492188"},{"lat":"29.374313479578","lng":"-89.563979134535"},{"lat":"29.367286495915","lng":"-89.548015594482"},{"lat":"29.364229020841","lng":"-89.534538404139"},{"lat":"29.3512934873668","lng":"-89.5028686523438"},{"lat":"29.343067667638","lng":"-89.484157562256"},{"lat":"29.342988035785","lng":"-89.47600439288"},{"lat":"29.348933306914","lng":"-89.468665936179"},{"lat":"29.360414361438","lng":"-89.460124969482"},{"lat":"29.363253281371","lng":"-89.453001081917"},{"lat":"29.36190264457","lng":"-89.443817138672"},{"lat":"29.351441158628","lng":"-89.417381286621"},{"lat":"29.327216574469","lng":"-89.389057159424"},{"lat":"29.310917835722","lng":"-89.375152587891"},{"lat":"29.298931298675","lng":"-89.366267903349"},{"lat":"29.288291076823","lng":"-89.355669021606"},{"lat":"29.276715460657","lng":"-89.34511116615"},{"lat":"29.2699309537328","lng":"-89.3380737304686"},{"lat":"29.252420931895","lng":"-89.318633079529"},{"lat":"29.224435133157","lng":"-89.2913818359376"},{"lat":"29.192848909556","lng":"-89.274387359619"},{"lat":"29.157647431499","lng":"-89.256362915039"},{"lat":"29.129181803794","lng":"-89.26082611084"},{"lat":"29.106405857797","lng":"-89.272155761719"},{"lat":"29.078676035583","lng":"-89.287776947022"},{"lat":"29.066837274078","lng":"-89.304001288744"},{"lat":"29.046894416089","lng":"-89.318161010742"},{"lat":"29.004146751269","lng":"-89.351123057458"},{"lat":"28.962439790059","lng":"-89.387855529785"},{"lat":"28.913788227082","lng":"-89.425277709961"},{"lat":"28.90058093549","lng":"-89.433860778808"},{"lat":"24.568646393886","lng":"-81.953047363902"},{"lat":"24.370032173291","lng":"-81.710815429688"},{"lat":"24.684945208051","lng":"-80.44189453125"},{"lat":"25.163013398961","lng":"-80.119171142578"},{"lat":"25.524071455901","lng":"-80.006561279296"},{"lat":"25.974611731762","lng":"-79.968083559245"},{"lat":"26.064184903324","lng":"-80.086212158203"},{"lat":"26.064184903324","lng":"-80.086212158203"},{"lat":"26.063219177621","lng":"-80.12020111084"},{"lat":"26.063219177621","lng":"-80.12020111084"},{"lat":"26.064184903324","lng":"-80.086212158203"},{"lat":"26.064184903324","lng":"-80.086212158203"},{"lat":"25.974611731762","lng":"-79.968083559245"},{"lat":"26.640093919805","lng":"-79.063110351562"},{"lat":"26.734337128301","lng":"-78.975219726561"},{"lat":"26.917482962839","lng":"-78.435730099996"},{"lat":"26.977864563025","lng":"-77.873840332031"},{"lat":"35.895181682182","lng":"-5.73486328125"},{"lat":"38.71484180509","lng":"8.6956787109375"},{"lat":"38.772129362781","lng":"9.1562646069855"},{"lat":"39.135585439329","lng":"9.164976577041"},{"lat":"39.183984877368","lng":"9.1120331059567"},{"lat":"39.183984877368","lng":"9.1120331059567"},{"lat":"39.2166666667","lng":"9.11666666667"}]}');
+            $.each(json.coordinates, function(k, v){
+                _this._flightPlanCoordinates.push(new _this._google.maps.LatLng(parseFloat(v.lat), parseFloat(v.lng)));
+            });
+            _this._flightPath.push(new _this._google.maps.Polyline({
+                path: _this._flightPlanCoordinates,
+                geodesic: true,
+                strokeColor: '#5a73ea',
+                strokeOpacity: 1.0,
+                strokeWeight: 4,
+                icons: [{
+                    icon: lineSymbol,
+                    offset: '100%'
+                }],
+                map: _this._map
+            }));
+            _this._animate_circle(_this._flightPath[_this._flightPath.length-1]);
+            $processing_modal.modal('hide');
+        });
+    },
+    _fit_to_markers: function(markers){
+        var _this = this;
+        if(markers.length>0){
+            var bounds = new _this._google.maps.LatLngBounds();
+            for( var index in markers ) {
+                var latlng = markers[index].getPosition();
+                bounds.extend(latlng);
+            }
+            if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
+                var extendPoint1 = new google.maps.LatLng(bounds.getNorthEast().lat() + 0.01, bounds.getNorthEast().lng() + 0.01);
+                var extendPoint2 = new google.maps.LatLng(bounds.getNorthEast().lat() - 0.01, bounds.getNorthEast().lng() - 0.01);
+                bounds.extend(extendPoint1);
+                bounds.extend(extendPoint2);
+            }
+            _this._map.fitBounds(bounds);
+        }
+    },
+    _animate_circle: function(line) {
+        var count = 0;
+        var _this = this;
+        _this._interval.push(window.setInterval(function() {
+            count = (count + 1) % 200;
+            var icons = line.get('icons');
+            icons[0].offset = (count / 2) + '%';
+            line.set('icons', icons);
+        }, 200));
+    },
+    _stop_animate: function(){
+        var _this = this;
+        for(var k = 0; k < _this._interval.length; k++){
+            clearInterval(_this._interval[k]);
+        }
+    }
+};

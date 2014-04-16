@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-2 col-md-6 col-md-offset-2 col-lg-5 col-lg-offset-3">
+    <section class="panel panel-warning">
+      <div class="panel-heading">
+        <ul class="title">
+          <li>
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Filename</div>
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">&nbsp;</div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">Gen.</div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">Down</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="panel-body">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <div class="row line">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Demand Result</div>
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <div class="progress progress-striped">
+                  <div id="bar-demand" class="progress-bar progress-bar-success" role="progressbar" style="width: 100%">
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">
+                <button class="btn btn-info btn-xs btn-refresh" data-process="generate_xlsx"><i class="icon-refresh"></i></button>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center"><%= link_to "",  backend_demand_path(format: "xlsx"), class: 'icon-cloud-download down' %></div>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="row line">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Empty</div>
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <div class="progress progress-striped">
+                  <div id="bar-empty" class="progress-bar progress-bar-success" role="progressbar" style="width: 100%">
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">
+                <button class="btn btn-info btn-xs btn-refresh" data-process="empty_od_xlsx"><i class="icon-refresh"></i></button>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center"><%= link_to "",  backend_empty_path(format: "xlsx"), class: 'icon-cloud-download down' %></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</div>
+
+<% content_for :javascripts do %>
+    <script type="text/javascript">
+        Results.init();
+    </script>
+<% end %>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="not_merge">
+
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+
+      <Row>
+        <Cell><Data ss:Type="String">eqty_iso_fk</Data></Cell>
+        <Cell><Data ss:Type="String">localidad</Data></Cell>
+        <Cell><Data ss:Type="String">unidades</Data></Cell>
+        <Cell><Data ss:Type="String">fecha_disp</Data></Cell>
+        <Cell><Data ss:Type="String">minimo</Data></Cell>
+      </Row>
+      <% @out_data.each do |c| %>
+          <Row background="#FF0000">
+            <Cell><Data ss:Type="String"><%= c['eqty_iso_fk'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['localidad'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['unidades'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['fecha_disp'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['minimo'] %></Data></Cell>
+          </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

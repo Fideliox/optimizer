@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="not_merge">
+
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+
+      <Row>
+        <Cell><Data ss:Type="String">dda</Data></Cell>
+        <Cell><Data ss:Type="String">cost_per_teu_leg</Data></Cell>
+        <Cell><Data ss:Type="String">total_cost_per_teu_leg</Data></Cell>
+        <Cell><Data ss:Type="String">sol_units_teu</Data></Cell>
+        <Cell><Data ss:Type="String">rate_per_teu</Data></Cell>
+        <Cell><Data ss:Type="String">opp_value_per_teu</Data></Cell>
+        <Cell><Data ss:Type="String">leg</Data></Cell>
+        <Cell><Data ss:Type="String">max_units</Data></Cell>
+        <Cell><Data ss:Type="String">type</Data></Cell>
+        <Cell><Data ss:Type="String">leg_distance</Data></Cell>
+      </Row>
+      <% @out_data.each do |c| %>
+          <Row background="#FF0000">
+            <Cell><Data ss:Type="String"><%= c['dda'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['cost_per_teu_leg'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['total_cost_per_teu_leg'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['sol_units_teu'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['rate_per_teu'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['opp_value_per_teu'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['leg'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['max_units'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['type'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['leg_distance'] %></Data></Cell>
+          </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

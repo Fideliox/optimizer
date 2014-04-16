@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="not_merge">
+
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+
+      <Row>
+        <Cell><Data ss:Type="String">servicio1</Data></Cell>
+        <Cell><Data ss:Type="String">sentido1</Data></Cell>
+        <Cell><Data ss:Type="String">nave1</Data></Cell>
+        <Cell><Data ss:Type="String">viaje1</Data></Cell>
+        <Cell><Data ss:Type="String">por_onu</Data></Cell>
+        <Cell><Data ss:Type="String">pol_onu</Data></Cell>
+        <Cell><Data ss:Type="String">pod_onu</Data></Cell>
+        <Cell><Data ss:Type="String">podl_onu</Data></Cell>
+        <Cell><Data ss:Type="String">direct_ts</Data></Cell>
+        <Cell><Data ss:Type="String">item_type</Data></Cell>
+        <Cell><Data ss:Type="String">cnt_type_iso</Data></Cell>
+        <Cell><Data ss:Type="String">comm_name</Data></Cell>
+        <Cell><Data ss:Type="String">issuer_name</Data></Cell>
+        <Cell><Data ss:Type="String">customer_type</Data></Cell>
+        <Cell><Data ss:Type="String">cantidad</Data></Cell>
+        <Cell><Data ss:Type="String">freight_tons_un</Data></Cell>
+        <Cell><Data ss:Type="String">weight_un</Data></Cell>
+        <Cell><Data ss:Type="String">teus</Data></Cell>
+        <Cell><Data ss:Type="String">lost_teus</Data></Cell>
+        <Cell><Data ss:Type="String">flete_all_in_us_un</Data></Cell>
+        <Cell><Data ss:Type="String">other_cost</Data></Cell>
+      </Row>
+      <% @out_data.each do |c| %>
+          <Row background="#FF0000">
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="String"><%= c['servicio1'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="String"><%= c['sentido1'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="String"><%= c['nave1'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="String"><%= c['viaje1'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="String"><%= c['por_onu'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="String"><%= c['pol_onu'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="String"><%= c['pod_onu'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="String"><%= c['podl_onu'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="String"><%= c['direct_ts'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="String"><%= c['item_type'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="String"><%= c['cnt_type_iso'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="String"><%= c['comm_name'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="String"><%= c['issuer_name'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="String"><%= c['customer_type'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="Number"><%= c['cantidad'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="Number"><%= c['freight_tons_un'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="Number"><%= c['weight_un'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="Number"><%= c['teus'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="Number"><%= c['lost_teus'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="Number"><%= c['flete_all_in_us_un'] %></Data></Cell>
+            <Cell <%= 'ss:StyleID="not_merge"' if c['accepted'] == nil %>><Data ss:Type="Number"><%= c['other_cost']  %></Data></Cell>
+          </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

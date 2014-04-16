@@ -1,0 +1,38 @@
+.label-ship{
+    white-space: normal;
+}
+#ul-content > li{
+    width: 188px;
+}
+.ships{
+    height: 60px;
+}
+.div-status{
+    top: -17px;
+    position: relative;
+}
+.div-container{
+    top: -33px;
+    position: relative;
+}
+#scrolly{
+    overflow: auto;
+    overflow-y: hidden;
+    margin: 0 auto;
+    white-space: nowrap;
+    font-size: .9em;
+}
+.iz-table{
+    margin-left: 25px;
+}
+.panel-heading{
+    border-color: #eff2f7;
+    font-size: 14px;
+    font-weight: 200;;
+}
+/*
+.panel-primary > .panel-heading{
+    background: red;
+    border-color: #000000;
+}
+*/

@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="not_merge">
+
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+
+      <Row>
+        <Cell><Data ss:Type="String">por</Data></Cell>
+        <Cell><Data ss:Type="String">pol</Data></Cell>
+        <Cell><Data ss:Type="String">pot</Data></Cell>
+        <Cell><Data ss:Type="String">pod</Data></Cell>
+        <Cell><Data ss:Type="String">podl</Data></Cell>
+        <Cell><Data ss:Type="String">bl_move_type</Data></Cell>
+        <Cell><Data ss:Type="String">ship_cond</Data></Cell>
+        <Cell><Data ss:Type="String">podl_onu</Data></Cell>
+        <Cell><Data ss:Type="String">bl_service</Data></Cell>
+        <Cell><Data ss:Type="String">bl_bound</Data></Cell>
+        <Cell><Data ss:Type="String">bl_item_type</Data></Cell>
+        <Cell><Data ss:Type="String">blk_item_type</Data></Cell>
+        <Cell><Data ss:Type="String">comm_code</Data></Cell>
+        <Cell><Data ss:Type="String">pieces_cnt</Data></Cell>
+        <Cell><Data ss:Type="String">pieces_bb</Data></Cell>
+        <Cell><Data ss:Type="String">pieces_mty</Data></Cell>
+        <Cell><Data ss:Type="String">wt</Data></Cell>
+        <Cell><Data ss:Type="String">vol</Data></Cell>
+        <Cell><Data ss:Type="String">c_cleaning</Data></Cell>
+        <Cell><Data ss:Type="String">c_repair</Data></Cell>
+        <Cell><Data ss:Type="String">c_handling</Data></Cell>
+        <Cell><Data ss:Type="String">c_uld_fee_load</Data></Cell>
+        <Cell><Data ss:Type="String">c_uld_fee_disc</Data></Cell>
+        <Cell><Data ss:Type="String">c_uld</Data></Cell>
+        <Cell><Data ss:Type="String">c_storage</Data></Cell>
+        <Cell><Data ss:Type="String">c_repo_load</Data></Cell>
+        <Cell><Data ss:Type="String">c_repo_disc</Data></Cell>
+        <Cell><Data ss:Type="String">c_comm</Data></Cell>
+        <Cell><Data ss:Type="String">c_disch_c</Data></Cell>
+        <Cell><Data ss:Type="String">c_disc</Data></Cell>
+        <Cell><Data ss:Type="String">c_fwd</Data></Cell>
+        <Cell><Data ss:Type="String">c_inl_d</Data></Cell>
+        <Cell><Data ss:Type="String">c_inl_e_d</Data></Cell>
+        <Cell><Data ss:Type="String">c_inl_o</Data></Cell>
+        <Cell><Data ss:Type="String">c_load_c</Data></Cell>
+        <Cell><Data ss:Type="String">c_load</Data></Cell>
+        <Cell><Data ss:Type="String">c_pst_d</Data></Cell>
+        <Cell><Data ss:Type="String">c_pre_l</Data></Cell>
+        <Cell><Data ss:Type="String">c_strp</Data></Cell>
+        <Cell><Data ss:Type="String">c_stuf</Data></Cell>
+        <Cell><Data ss:Type="String">c_tax_p</Data></Cell>
+        <Cell><Data ss:Type="String">c_tran_c</Data></Cell>
+        <Cell><Data ss:Type="String">c_vess</Data></Cell>
+      </Row>
+      <% @out_data.each do |c| %>
+          <Row background="#FF0000">
+            <Cell><Data ss:Type="String"><%= c['por'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['pol'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['pot'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['pod'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['podl'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['bl_move_type'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['ship_cond'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['podl_onu'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['bl_service'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['bl_bound'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['bl_item_type'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['blk_item_type'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['comm_code'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['pieces_cnt'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['pieces_bb'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['pieces_mty'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['wt'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['vol'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_cleaning'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_repair'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_handling'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_uld_fee_load'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_uld_fee_disc'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_uld'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_storage'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_repo_load'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_repo_disc'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_disc'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_fwd'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_inl_d'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_inl_e_d'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_inl_o'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_load_c'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_load'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_pst_d'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_pre_l'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_strp'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_stuf'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_tax_p'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_tran_c'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['c_vess'] %></Data></Cell>
+          </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

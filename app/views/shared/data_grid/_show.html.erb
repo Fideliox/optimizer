@@ -1,0 +1,20 @@
+<%
+   data_grid = @data_grid
+   model = data_grid[:model]
+   dataset = data_grid[:dataset]
+   column_names = model.column_names.select{|n| !data_grid[:ignore].include? n}
+   model_name = model.model_name.plural
+%>
+<ul id="myTab" class="nav nav-tabs">
+  <li><a href="#" data-toggle="tab"><strong><%= t('dg.read') %></strong></a></li>
+</ul>
+<div class="tab-content text-info" style="overflow:hidden;">
+  <div class="tab-pane active in active">
+    <blockquote>
+      <% column_names.each do |f| %>
+          <p></p><strong><%= t("#{model_name}.#{f}")%></strong></p>
+          <%=  eval("dataset.#{f}") %><p>
+      <% end %>
+    </blockquote>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="row">
+  <div class="col-sm-2 col-md-2 col-lg-2">
+    <div class="form-group">
+      <label class="">Week Leg</label>
+      <select class="form-control selectpicker input-sm" id="week_leg">
+
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="">Vessel</label>
+      <select class="form-control selectpicker input-sm" id="vessel">
+
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="">Voyage</label>
+      <select class="form-control selectpicker input-sm" id="voyage">
+
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="">Origin</label>
+      <select class="form-control selectpicker input-sm" id="origin">
+
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="">Destination</label>
+      <select class="form-control selectpicker input-sm" id="destination">
+
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="">Month</label>
+      <select class="form-control selectpicker input-sm" id="month">
+
+      </select>
+    </div>
+
+    <div class="form-group">
+      <button class="form-control input-sm btn btn-primary" id="btn-search">
+        Search
+      </button>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10" id="scrolly">
+
+  </div>
+</div>
+
+<% content_for :javascripts do %>
+    <script type="text/javascript">
+        Week.init();
+    </script>
+<% end %>

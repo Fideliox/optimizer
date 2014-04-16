@@ -1,0 +1,18 @@
+<script type="text/html" id="data-grid-results" xmlns="http://www.w3.org/1999/html">
+    {{#list}}
+    <tr>
+      <td width="5px" class="text-center"><div class="more-results manito" data-object="{{resource}}">+</div></td>
+      <td width="10px">{{ship}}</td>
+      <td width="10px" class="text-center">{{travel}}</td>
+      <td width="10px">{{location}}</td>
+      <td width="10px">{{destination}}</td>
+      <td width="10px" class="text-center">{{max_teu}}</td>
+      <td width="15px" class="text-center {{class_teu}}">{{max_teu}}<strong>/</strong>{{used_teu}}<strong>/</strong>{{empty_teu}}</td>
+      <td width="15px" class="text-center {{class_plugs}}">{{max_plugs_teu}}<strong>/</strong>{{used_plugs}}</td>
+      <td width="15px" class="text-center {{class_weight}}">{{max_weight}}<strong>/</strong>{{used_weight}}</td>
+    </tr>
+    <tr style="background-color:grey">
+        <td colspan="5" id="{{object}}" style="display:none"></td>
+    </tr>
+    {{/list}}
+</script>

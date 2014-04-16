@@ -1,0 +1,27 @@
+<script type="text/html" id="widget" xmlns="http://www.w3.org/1999/html">
+    <div class="panel panel-success">
+      <div class="panel-heading">{{title}}</div>
+      <div class="panel-body">
+        <table class="iz-table" cellpadding="3">
+          <thead>
+          <tr>
+            <th>&nbsp;</th>
+            {{#theader}}
+            <th class="text-center">{{name}}</th>
+            {{/theader}}
+          </tr>
+          </thead>
+          <tbody>
+          {{#items}}
+          <tr>
+            <td>{{name}}</td>
+            {{#value}}
+            <td class="text-right">{{name}}</td>
+            {{/value}}
+          </tr>
+          {{/items}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+</script>

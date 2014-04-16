@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="not_merge">
+
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">vessel</Data></Cell>
+        <Cell><Data ss:Type="String">service_code</Data></Cell>
+        <Cell><Data ss:Type="String">vessel_code</Data></Cell>
+        <Cell><Data ss:Type="String">operator</Data></Cell>
+        <Cell><Data ss:Type="String">port</Data></Cell>
+        <Cell><Data ss:Type="String">bound</Data></Cell>
+        <Cell><Data ss:Type="String">average_weight_cap</Data></Cell>
+        <Cell><Data ss:Type="String">average_teus_cap</Data></Cell>
+        <Cell><Data ss:Type="String">average_reefer</Data></Cell>
+        <Cell><Data ss:Type="String">ttl_wt_bb</Data></Cell>
+        <Cell><Data ss:Type="String">ttl_vol_bb</Data></Cell>
+        <Cell><Data ss:Type="String">voyage</Data></Cell>
+      </Row>
+      <% @out_data.each do |c| %>
+          <Row background="#FF0000">
+            <Cell><Data ss:Type="String"><%= c['vessel'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['service_code'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['vessel_code'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['operator'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['port'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['bound'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['average_weight_cap'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['average_teus_cap'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['average_reefer'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['ttl_wt_bb'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['ttl_vol_bb'] %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= c['voyage'] %></Data></Cell>
+          </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

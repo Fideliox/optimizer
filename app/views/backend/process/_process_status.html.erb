@@ -1,0 +1,122 @@
+<section class="panel panel-warning">
+  <div class="panel-heading">
+    <ul class="title">
+      <li>
+        <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Process status</div>
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">&nbsp;</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="panel-body">
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="row line">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="row">
+              <div class="col-lg-12">Initializing model</div>
+            </div>
+          </div>
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+            <div class="progress progress-striped">
+              <div id="barp-model" class="progress-bar progress-bar-success" role="progressbar" style="width: 100%">
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row line">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="row">
+              <div class="col-lg-12">Generating routes</div>
+            </div>
+            <div class="row">
+              <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8"><div id="label-routes"></div></div>
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <a id="div-routes" class="btn btn-xs btn-warning icon-warning-sign" href="/backend/process/routes.xlsx"></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+            <div class="progress progress-striped">
+              <div id="barp-routes" class="progress-bar progress-bar-success" role="progressbar" style="width: 100%">
+              </div>
+              <div id="barpw-routes" class="progress-bar progress-bar-warning" style="width: 0%">
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row line">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Processing demands</div>
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+            <div class="progress progress-striped">
+              <div id="barp-demands" class="progress-bar progress-bar-success" role="progressbar" style="width: 100%">
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row line">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Processing empty containers</div>
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+            <div class="progress progress-striped">
+              <div id="barp-empty" class="progress-bar progress-bar-success" role="progressbar" style="width: 100%">
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row line">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Solve</div>
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+            <div class="progress progress-striped">
+              <div id="barp-solve" class="progress-bar progress-bar-success" role="progressbar" style="width: 100%">
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row line">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Adding distance to results</div>
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+            <div class="progress progress-striped">
+              <div id="barp-distance" class="progress-bar progress-bar-success" role="progressbar" style="width: 100%">
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <!--
+      <li class="list-group-item">
+        <div class="row line">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Empty distribution</div>
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+            <div class="progress progress-striped">
+              <div id="barp-empty2" class="progress-bar progress-bar-success" role="progressbar" style="width: 100%">
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      -->
+      <li class="list-group-item">
+        <div class="row line">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Exporting Data</div>
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+            <div class="progress progress-striped">
+              <div id="barp-exporting" class="progress-bar progress-bar-success" role="progressbar" style="width: 100%">
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>

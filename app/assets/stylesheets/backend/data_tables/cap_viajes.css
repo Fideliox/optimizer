@@ -1,0 +1,31 @@
+.box-travel {
+    border: 1px solid #000;
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 400px;
+}
+.title-travel{
+    font-size: 10px;
+    font-weight: bold;
+    float: right;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+.modal-dialog {
+    width: 400px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+#scrolly{
+    overflow: auto;
+    overflow-y: hidden;
+    margin: 0 auto;
+    white-space: nowrap;
+    font-size: .9em;
+}
+.table {
+    margin:0px;padding:0px;
+    width:100%;
+    border:1px solid #000000;
+    border-bottom-left-radius:7px;
+}

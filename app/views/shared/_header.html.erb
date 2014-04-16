@@ -1,0 +1,172 @@
+<header class="header white-bg">
+<div class="sidebar-toggle-box">
+  <div data-original-title="Menu" data-placement="right" class="icon-reorder tooltips"></div>
+</div>
+<!--logo start-->
+<a href="/" class="logo">
+  <figure>
+
+  </figure>
+</a>
+<!--logo end-->
+<div class="nav notify-row" id="top_menu">
+<!--  notification start -->
+<ul class="nav top-menu">
+<!-- settings start -->
+<li class="dropdown">
+  <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+    <i class="icon-tasks"></i>
+    <span class="badge bg-success" id="text-task">0</span>
+  </a>
+  <ul class="dropdown-menu extended tasks-bar">
+    <div class="notify-arrow notify-arrow-green"></div>
+    <li>
+      <p class="green">Tasks</p>
+    </li>
+    <li>
+      <a href="#">
+        <div class="task-info">
+          <div class="desc" id="text-itineraries-filename">Itineraries</div>
+          <div class="percent" id="text-itineraries">100%</div>
+        </div>
+        <div class="progress progress-striped">
+          <div id="bar-itineraries" class="progress-bar" role="progressbar" style="width: 100%">
+          </div>
+        </div>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <div class="task-info">
+          <div class="desc" id="text-demands-filename">Demands</div>
+          <div class="percent" id="text-demands">100%</div>
+        </div>
+        <div class="progress progress-striped">
+          <div id="bar-demands" class="progress-bar" role="progressbar" style="width: 100%">
+          </div>
+        </div>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <div class="task-info">
+          <div class="desc" id="text-capabilities-filename">Capabilities</div>
+          <div class="percent" id="text-capabilities">100%</div>
+        </div>
+        <div class="progress progress-striped">
+          <div id="bar-capabilities" class="progress-bar" role="progressbar"  style="width: 100%">
+          </div>
+        </div>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <div class="task-info">
+          <div class="desc" id="text-costs-filename">Costs</div>
+          <div class="percent" id="text-costs">100%</div>
+        </div>
+        <div class="progress progress-striped">
+          <div id="bar-costs"  class="progress-bar" role="progressbar" style="width: 100%">
+            <span class="sr-only">100%</span>
+          </div>
+        </div>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <div class="task-info">
+          <div class="desc" id="text-stocks-filename">Stocks</div>
+          <div class="percent"  id="text-stocks">100%</div>
+        </div>
+        <div class="progress progress-striped">
+          <div id="bar-stocks"  class="progress-bar" role="progressbar" style="width: 100%">
+            <span class="sr-only">100%</span>
+          </div>
+        </div>
+      </a>
+    </li>
+  </ul>
+</li>
+
+<!-- settings end -->
+
+<!-- inbox dropdown end -->
+<!--
+<li id="header_notification_bar" class="dropdown">
+  <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+    <i class="icon-bell-alt"></i>
+    <span class="badge bg-warning">7</span>
+  </a>
+  <ul class="dropdown-menu extended notification">
+    <div class="notify-arrow notify-arrow-yellow"></div>
+    <li>
+      <p class="yellow">You have 7 new notifications</p>
+    </li>
+    <li>
+      <a href="#">
+        <span class="label label-danger"><i class="icon-bolt"></i></span>
+        Server #3 overloaded.
+        <span class="small italic">34 mins</span>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <span class="label label-warning"><i class="icon-bell"></i></span>
+        Server #10 not respoding.
+        <span class="small italic">1 Hours</span>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <span class="label label-danger"><i class="icon-bolt"></i></span>
+        Database overloaded 24%.
+        <span class="small italic">4 hrs</span>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <span class="label label-success"><i class="icon-plus"></i></span>
+        New user registered.
+        <span class="small italic">Just now</span>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <span class="label label-info"><i class="icon-bullhorn"></i></span>
+        Application error.
+        <span class="small italic">10 mins</span>
+      </a>
+    </li>
+    <li>
+      <a href="#">See all notifications</a>
+    </li>
+  </ul>
+</li>
+ dropdown end -->
+</ul>
+</div>
+<div class="top-nav ">
+  <ul class="nav pull-right top-menu">
+    <li>
+      <input type="text" class="search" placeholder="Search">
+    </li>
+    <!-- user login dropdown start-->
+    <li class="dropdown">
+      <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+        <span class="username">Welcome, <%= current_rbo_user.name %></span>
+        <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu extended logout">
+        <div class="log-arrow-up"></div>
+        <li>
+          <%= link_to(destroy_rbo_user_session_path) do %>
+              <i class="icon-key"></i> Log Out
+          <% end %>
+        </li>
+      </ul>
+    </li>
+    <!-- user login dropdown end -->
+  </ul>
+</div>
+</header>
